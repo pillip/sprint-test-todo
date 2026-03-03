@@ -1,0 +1,3 @@
+[submodule ".claude-kit"]
+	path = .claude-kit
+	url = /Users/pillip/project/practice/claude-dev-kit
