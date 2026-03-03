@@ -1,14 +1,20 @@
 """FastAPI application with CRUD API endpoints for todos."""
 
+import os
 from contextlib import asynccontextmanager
 from typing import Optional
 
 import aiosqlite
 from fastapi import FastAPI, HTTPException, Query, Response
+from starlette.responses import FileResponse
+from starlette.staticfiles import StaticFiles
 
 from src.crud import create_todo, delete_todo, get_todo, get_todos, update_todo
 from src.database import get_db_path, init_db
 from src.models import Category, TodoCreate, TodoResponse, TodoUpdate
+
+# Resolve static directory relative to project root
+_STATIC_DIR = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "static")
 
 
 @asynccontextmanager
@@ -74,3 +80,13 @@ async def delete_todo_endpoint(todo_id: int):
         if not success:
             raise HTTPException(status_code=404, detail="Todo not found")
         return Response(status_code=204)
+
+
+@app.get("/")
+async def root():
+    """Serve the main HTML page."""
+    return FileResponse(os.path.join(_STATIC_DIR, "index.html"))
+
+
+# Mount static files AFTER API routes to avoid path conflicts
+app.mount("/static", StaticFiles(directory=_STATIC_DIR), name="static")
