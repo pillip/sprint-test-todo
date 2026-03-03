@@ -137,3 +137,22 @@ class TestDeleteTodo:
     async def test_invalid_id_returns_404(self, client):
         resp = await client.delete("/api/todos/999")
         assert resp.status_code == 404
+
+
+class TestStaticServing:
+    async def test_root_returns_html(self, client):
+        resp = await client.get("/")
+        assert resp.status_code == 200
+        assert "text/html" in resp.headers["content-type"]
+
+    async def test_static_css_returns_200(self, client):
+        resp = await client.get("/static/style.css")
+        assert resp.status_code == 200
+
+    async def test_static_js_returns_200(self, client):
+        resp = await client.get("/static/app.js")
+        assert resp.status_code == 200
+
+    async def test_api_still_works_after_static_mount(self, client, valid_todo):
+        resp = await client.post("/api/todos", json=valid_todo)
+        assert resp.status_code == 201
