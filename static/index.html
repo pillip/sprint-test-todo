@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Todo List</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400&family=Playfair+Display:wght@700&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+
+  <!-- Live region for screen reader announcements -->
+  <div id="aria-live" class="sr-only" aria-live="polite" role="status"></div>
+
+  <main class="notebook">
+
+    <!-- App Header -->
+    <header class="app-header">
+      <h1 class="app-title">Todo List</h1>
+    </header>
+
+    <!-- Category Filter Tabs -->
+    <nav class="category-tabs" role="tablist" aria-label="Filter by category">
+      <button class="tab" role="tab" aria-selected="true" data-category="all">All</button>
+      <button class="tab tab--work" role="tab" aria-selected="false" data-category="work">Work</button>
+      <button class="tab tab--personal" role="tab" aria-selected="false" data-category="personal">Personal</button>
+      <button class="tab tab--shopping" role="tab" aria-selected="false" data-category="shopping">Shopping</button>
+      <button class="tab tab--health" role="tab" aria-selected="false" data-category="health">Health</button>
+    </nav>
+
+    <!-- Creation Form -->
+    <section class="form-section" aria-labelledby="form-heading">
+      <span class="form-label" id="form-heading">Add New</span>
+      <form id="todo-form" class="form-fields" novalidate>
+        <div class="form-field">
+          <label for="title-input" class="sr-only">Todo title</label>
+          <input
+            type="text"
+            id="title-input"
+            class="input-text"
+            placeholder="What needs doing?"
+            maxlength="200"
+            required
+            aria-required="true"
+          >
+          <p id="title-error" class="field-error" role="alert" hidden>Please enter a title.</p>
+        </div>
+        <div class="form-field">
+          <label for="desc-input" class="sr-only">Todo description</label>
+          <textarea
+            id="desc-input"
+            class="input-textarea"
+            placeholder="Add a note (optional)"
+            maxlength="1000"
+            rows="1"
+          ></textarea>
+        </div>
+        <div class="form-row">
+          <div class="form-field" style="flex:1">
+            <label for="cat-select" class="sr-only">Category</label>
+            <select id="cat-select" class="input-select" aria-label="Category">
+              <option value="work">Work</option>
+              <option value="personal">Personal</option>
+              <option value="shopping">Shopping</option>
+              <option value="health">Health</option>
+            </select>
+          </div>
+          <button type="submit" id="submit-btn" class="btn-primary">Add</button>
+        </div>
+      </form>
+    </section>
+
+    <!-- Todo List Area -->
+    <section class="todo-list-area ruled-lines ruled-lines--min-height" aria-label="Todo list">
+
+      <!-- Populated list (will be filled by JS) -->
+      <ul id="todo-list" class="todo-list" role="list" aria-label="Todo list">
+      </ul>
+
+      <!-- Loading State -->
+      <div id="state-loading" hidden>
+        <div class="skeleton">
+          <div class="skeleton__block skeleton__checkbox"></div>
+          <div class="skeleton__block skeleton__text" style="width:60%"></div>
+          <div class="skeleton__block skeleton__badge"></div>
+        </div>
+        <div class="skeleton">
+          <div class="skeleton__block skeleton__checkbox"></div>
+          <div class="skeleton__block skeleton__text" style="width:75%"></div>
+          <div class="skeleton__block skeleton__badge"></div>
+        </div>
+        <div class="skeleton">
+          <div class="skeleton__block skeleton__checkbox"></div>
+          <div class="skeleton__block skeleton__text" style="width:45%"></div>
+          <div class="skeleton__block skeleton__badge"></div>
+        </div>
+      </div>
+
+      <!-- Empty State -->
+      <div id="state-empty" class="empty-state" role="status" hidden>
+        No todos yet. Add one above to get started.
+      </div>
+
+      <!-- Error State -->
+      <div id="state-error" class="error-state" hidden>
+        <p class="error-state__message" role="alert">Could not load your todos.</p>
+        <button id="retry-btn" class="btn-ghost">Try again</button>
+      </div>
+
+    </section>
+
+  </main>
+
+  <!-- Toast (hidden by default) -->
+  <div id="toast" class="toast toast--hidden" role="alert"></div>
+
+  <script src="/static/app.js"></script>
+</body>
+</html>
